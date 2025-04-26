@@ -14,7 +14,6 @@ class RemainingTaskView extends StatefulWidget {
 }
 
 class _RemainingTaskViewState extends State<RemainingTaskView> {
-  // List<TaskIsarModel> _tasks = [];
   Map<String, List<TaskIsarModel>> groupedTask = {};
 
   @override

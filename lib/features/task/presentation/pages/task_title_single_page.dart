@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:taskmate/core/constants/app_sizes.dart';
 
 import '../../data/models/task_title_list_isar_model.dart';
 import '../widgets/add_task_bottom_sheet.dart';
@@ -26,7 +25,7 @@ class TaskTitleSinglePage extends StatelessWidget {
             //for tab view
             Expanded(
               child: TabBarView(
-                children: [RemainingTaskView(taskTitleListIsarModel: taskTitleListIsarModel,), CompletedTaskView()],
+                children: [RemainingTaskView(taskTitleListIsarModel: taskTitleListIsarModel,), CompletedTaskView(taskTitleListIsarModel: taskTitleListIsarModel)],
               ),
             ),
             //end for tab view

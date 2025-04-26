@@ -67,13 +67,14 @@ class _RemainingTaskViewState extends State<RemainingTaskView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
-        padding: EdgeInsets.all( AppSizes.paddingBody),
+        padding: EdgeInsets.symmetric(horizontal: AppSizes.paddingBody),
         children: groupedTask.entries.map((entry) {
           final sectionTitle = entry.key;
           final tasks = entry.value;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: AppSizes.paddingBody*2,),
               Text(
                 sectionTitle,
                 style: TextStyle(
@@ -93,7 +94,7 @@ class _RemainingTaskViewState extends State<RemainingTaskView> {
                         boxShadow: AppColors.boxShadow,
                         borderRadius: BorderRadius.circular(AppSizes.cardRadius),
                       ),
-                      margin: EdgeInsets.only(top: AppSizes.paddingBody),
+                      margin: EdgeInsets.only(top: AppSizes.paddingInside),
                       padding: const EdgeInsets.symmetric(vertical: AppSizes.paddingInside),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,8 +117,8 @@ class _RemainingTaskViewState extends State<RemainingTaskView> {
                                     fontSize: AppSizes.fontSizeSmall,
                                   ),
                                 ),
-                              Text(
-                                "10 am",
+                              if(task.taskDateTime != null)
+                              Text(formatDateTime(dateTime: task.taskDateTime, format: 'hh:mm a')??'',
                                 style: TextStyle(
                                   color: AppColors.subtitle,
                                   fontSize: AppSizes.fontSizeSmall,

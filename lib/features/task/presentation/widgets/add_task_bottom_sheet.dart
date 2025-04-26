@@ -54,11 +54,38 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         TaskIsarModel()
           ..name = taskText
           ..details = detailsText.isEmpty ? null : detailsText
+          ..taskDateTime = taskDateTimeNotifier.value == null ? null : taskDateTimeNotifier.value!.toIso8601String()
           ..createdAt = DateTime.now().toIso8601String();
+
+    int? todayTotalTaskCount;
+    int? todayRemainsTaskCount;
+    if(taskDateTimeNotifier.value != null){
+      final taskDate = taskDateTimeNotifier.value!;
+      final today = DateTime.now();
+      final taskDateOnly = DateTime(taskDate.year, taskDate.month, taskDate.day);
+      final todayOnly = DateTime(today.year, today.month, today.day);
+      todayTotalTaskCount = widget.taskTitleListIsarModel.todayTotalTaskCount;
+      todayRemainsTaskCount = widget.taskTitleListIsarModel.todayRemainsTaskCount;
+      if(todayOnly == taskDateOnly){
+        if(todayTotalTaskCount != null){
+          todayTotalTaskCount ++;
+        }else{
+          todayTotalTaskCount = 1;
+        }
+        if(todayRemainsTaskCount != null){
+          todayRemainsTaskCount ++;
+        }else{
+          todayRemainsTaskCount = 1;
+        }
+      }
+    }
+
 
     final db = DBServices.db;
     await db.writeTxn(() async {
       await db.taskIsarModels.put(newTask);
+      widget.taskTitleListIsarModel.todayTotalTaskCount = todayTotalTaskCount;
+      widget.taskTitleListIsarModel.todayRemainsTaskCount = todayRemainsTaskCount;
       widget.taskTitleListIsarModel.tasks.add(newTask);
       await widget.taskTitleListIsarModel.tasks.save();
     });

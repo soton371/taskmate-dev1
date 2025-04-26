@@ -56,7 +56,6 @@ class _RemainingTaskViewState extends State<RemainingTaskView> {
         }
         grouped[key]!.add(newTask);
       }
-
     }
 
     setState(() {

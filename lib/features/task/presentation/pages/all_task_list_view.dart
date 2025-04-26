@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taskmate/features/task/data/models/task_title_list_isar_model.dart';
 import 'package:taskmate/features/task/presentation/pages/task_title_create_page.dart';
 import 'package:taskmate/features/task/presentation/pages/task_title_single_page.dart';
 
@@ -65,7 +66,7 @@ class AllTaskListView extends StatelessWidget {
               itemBuilder: (context, i) {
                 return InkWell(
                   onTap: (){
-                    Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(title: "Title $i")));
+                    // Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: TaskTitleListIsarModel())));
                   },
                   child: Container(
                     decoration: BoxDecoration(

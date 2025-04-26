@@ -1,62 +1,81 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:taskmate/features/task/data/datasources/task_local_data_source.dart';
+import 'package:isar/isar.dart';
 import 'package:taskmate/features/task/presentation/pages/task_title_single_page.dart';
-
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/services/db_services.dart';
 import '../../task/data/models/task_title_list_isar_model.dart';
 import '../../task/presentation/pages/task_title_create_page.dart';
 
-class TaskTitleList extends StatelessWidget {
+class TaskTitleList extends StatefulWidget {
   const TaskTitleList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final titleList = [
-      {'title': 'My Tasks', 'count': null, 'today_total_task': null},
-      {'title': 'Sessions', 'count': 2, 'today_total_task': 2},
-      {'title': 'Task Mate', 'count': 20, 'today_total_task': 30},
-    ];
+  State<TaskTitleList> createState() => _TaskTitleListState();
+}
 
+class _TaskTitleListState extends State<TaskTitleList> {
+
+  late Stream<List<TaskTitleListIsarModel>> taskTitleListStream;
+
+  @override
+  void initState() {
+    super.initState();
+    // Create a stream that watches for changes in the Todo collection
+    final tt = DBServices.db.taskTitleListIsarModels;
+    taskTitleListStream = tt
+        .watchLazy(fireImmediately: true)
+        .asyncMap((_) => tt.where().findAll());
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: AppSizes.height(context, 105),
-      child: ListView.builder(
-        itemCount: titleList.length + 1, // extra for "New List" button
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, i) {
-          if (i < titleList.length) {
-            final title = titleList[i];
-            return Padding(
-              padding: const EdgeInsets.only(left: AppSizes.paddingBody),
-              child: TaskTitleCard(
-                onTap: () {
-                  // route title page for showing tasks by title
-                  Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(title: "${title['title']}")));
-                },
-                count: '${title['count'] ?? 0}',
-                title: "${title['title']}",
-                completed: title['count'] != null &&
-                    title['count'] == title['today_total_task'],
-              ),
-            );
-          } else {
-            // This is the last item: the "New List" card
-            return Padding(
-              padding: const EdgeInsets.only(left: AppSizes.paddingBody),
-              child: TaskTitleCard(
-                onTap: () {
-                  // open modal or page to add a new list
-                  Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleCreatePage()));
-                },
-                count: '+',
-                title: "New List",
-              ),
+      child: StreamBuilder<List<TaskTitleListIsarModel>>(
+          stream: taskTitleListStream,
+          builder: (context, snapshot) {
+            final taskTitleList = snapshot.data??[];
+            return ListView.builder(
+              itemCount: taskTitleList.length + 1, // extra for "New List" button
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (_, i) {
+                if (i < taskTitleList.length) {
+                  final taskTitle = taskTitleList[i];
+                  return Padding(
+                    padding: const EdgeInsets.only(left: AppSizes.paddingBody),
+                    child: TaskTitleCard(
+                      onTap: () {
+                        // route title page for showing tasks by title
+                        Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: taskTitle)));
+                      },
+                      count: "${taskTitle.todayRemainsTaskCount??00}",
+                      title: taskTitle.taskTitle??'Unknown',
+                      completed: taskTitle.todayRemainsTaskCount != null &&
+                          taskTitle.todayRemainsTaskCount == taskTitle.todayTotalTaskCount,
+                    ),
+                  );
+                } else {
+                  // This is the last item: the "New List" card
+                  return Padding(
+                    padding: const EdgeInsets.only(left: AppSizes.paddingBody),
+                    child: TaskTitleCard(
+                      onTap: () {
+                        // open modal or page to add a new list
+                        Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleCreatePage()));
+                      },
+                      count: '+',
+                      title: "New List",
+                    ),
+                  );
+                }
+              },
             );
           }
-        },
       ),
     );
   }

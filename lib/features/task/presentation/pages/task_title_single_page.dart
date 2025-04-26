@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:taskmate/core/constants/app_sizes.dart';
 
+import '../../data/models/task_title_list_isar_model.dart';
 import '../widgets/add_task_bottom_sheet.dart';
 import '../widgets/completed_task_view.dart';
 import '../widgets/remaining_task_view.dart';
 
 class TaskTitleSinglePage extends StatelessWidget {
-  const TaskTitleSinglePage({super.key, required this.title});
+  const TaskTitleSinglePage({super.key, required this.taskTitleListIsarModel});
 
-  final String title;
+  final TaskTitleListIsarModel taskTitleListIsarModel;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(taskTitleListIsarModel.taskTitle??'')),
       body: DefaultTabController(
         length: 2,
         child: Column(

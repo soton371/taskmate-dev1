@@ -45,10 +45,12 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
               builder: (_,value,child)=> TextButton(onPressed: value ? ()async{
                 TaskTitleListIsarModel model = TaskTitleListIsarModel();
                 model.taskTitle = titleCon.text;
+                model.todayRemainsTaskCount = 0;
+                model.todayTotalTaskCount = 0;
                 await TaskLocalDataSource().saveTaskTitle(model);
                 // find id then route
                 //route single task page for create task
-                Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(title: titleCon.text,)));
+                Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: model,)));
               }:null, child: Text("Next",style: TextStyle(fontWeight: FontWeight.bold),))
           ),
         ],
@@ -83,7 +85,11 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
                   Expanded(child: Text("Assign a title to your work collection, providing a clear label where you will later organize and number the numerous individual work items.")),
                 ],
               ),
-            )
+            ),
+            // ElevatedButton(onPressed: ()async{
+            //   final aa = await TaskLocalDataSource().getAllTaskTitles();
+            //   print("object aa: ${aa.length}");
+            // }, child: Text("data get"))
           ]
       ),
     );

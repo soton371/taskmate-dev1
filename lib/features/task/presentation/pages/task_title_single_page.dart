@@ -26,7 +26,7 @@ class TaskTitleSinglePage extends StatelessWidget {
             //for tab view
             Expanded(
               child: TabBarView(
-                children: [RemainingTaskView(), CompletedTaskView()],
+                children: [RemainingTaskView(taskTitleListIsarModel: taskTitleListIsarModel,), CompletedTaskView()],
               ),
             ),
             //end for tab view

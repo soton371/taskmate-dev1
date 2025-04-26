@@ -7,6 +7,7 @@ import 'package:taskmate/core/constants/app_sizes.dart';
 import 'package:taskmate/features/home/widgets/in_progress_card.dart';
 
 import '../../../core/widgets/widgets.dart';
+import '../../task/presentation/pages/all_task_list_view.dart';
 import '../../task/presentation/pages/task_title_create_page.dart';
 import '../widgets/service_card.dart';
 import '../widgets/upcoming_task.dart';
@@ -24,6 +25,12 @@ class HomePage extends StatelessWidget {
           HeadWidget(
             searchHint: 'Search list...',
             actionIcon: AppIcons.taskAdd,
+            searchOnTap: (){
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (_) => AllTaskListView()),
+              );
+            },
             actionOnTap: () {
               Navigator.push(
                 context,
@@ -69,7 +76,12 @@ class HomePage extends StatelessWidget {
                               fixedSize: Size(100, 15),
                               padding: EdgeInsets.zero,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(builder: (_) => AllTaskListView()),
+                              );
+                            },
                             child: Text(
                               "View Task",
                               style: TextStyle(

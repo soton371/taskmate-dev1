@@ -30,38 +30,36 @@ class RemainingTaskView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppSizes.cardRadius),
                 ),
                 margin: EdgeInsets.only(top: AppSizes.paddingBody),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: AppSizes.paddingInside),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Checkbox(value: false, onChanged: (onChanged) {}),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Google translate agent",
-                            style: TextStyle(fontWeight: FontWeight.w500),
+                padding: const EdgeInsets.symmetric(vertical: AppSizes.paddingInside),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(value: false, onChanged: (onChanged) {}),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Google translate agent",
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          "Details",
+                          style: TextStyle(
+                            color: AppColors.subtitle,
+                            fontSize: AppSizes.fontSizeSmall,
                           ),
-                          Text(
-                            "Details",
-                            style: TextStyle(
-                              color: AppColors.subtitle,
-                              fontSize: AppSizes.fontSizeSmall,
-                            ),
+                        ),
+                        Text(
+                          "10 am",
+                          style: TextStyle(
+                            color: AppColors.subtitle,
+                            fontSize: AppSizes.fontSizeSmall,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Text(
-                            "10 am",
-                            style: TextStyle(
-                              color: AppColors.subtitle,
-                              fontSize: AppSizes.fontSizeSmall,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
           ),

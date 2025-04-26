@@ -78,10 +78,10 @@ class DirectMessagePage extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(builder: (_) => SearchPage()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   CupertinoPageRoute(builder: (_) => SearchPage()),
+                        // );
                       },
                       child: Container(
                         padding: EdgeInsets.all(AppSizes.paddingInside),

@@ -32,6 +32,11 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          elevation: 0,
+          backgroundColor: AppColors.seed,
+          foregroundColor: Colors.white
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               fixedSize: Size(

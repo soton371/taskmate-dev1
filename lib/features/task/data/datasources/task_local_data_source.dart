@@ -8,7 +8,6 @@ class TaskLocalDataSource{
   Future<void> saveTaskTitle(TaskTitleListIsarModel model) async {
     await db.writeTxn(() async {
       await db.taskTitleListIsarModels.put(model);
-      await model.tasks.save();
     });
   }
 

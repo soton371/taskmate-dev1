@@ -43,12 +43,9 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
           ValueListenableBuilder(
               valueListenable: isTextNotEmptyNotifier,
               builder: (_,value,child)=> TextButton(onPressed: value ? ()async{
-                TaskTitleListIsarModel model = TaskTitleListIsarModel();
-                model.taskTitle = titleCon.text;
-                model.todayRemainsTaskCount = 0;
-                model.todayTotalTaskCount = 0;
+                TaskTitleListIsarModel model = TaskTitleListIsarModel()
+                ..taskTitle = titleCon.text;
                 await TaskLocalDataSource().saveTaskTitle(model);
-                // find id then route
                 //route single task page for create task
                 Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: model,)));
               }:null, child: Text("Next",style: TextStyle(fontWeight: FontWeight.bold),))

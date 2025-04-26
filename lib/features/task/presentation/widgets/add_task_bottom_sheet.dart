@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:taskmate/core/constants/app_sizes.dart';
+import 'package:taskmate/core/services/db_services.dart';
+
+import '../../data/models/task_title_list_isar_model.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({super.key});
+  const AddTaskBottomSheet({super.key, required this.taskTitleListIsarModel});
+  final TaskTitleListIsarModel taskTitleListIsarModel;
 
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
@@ -37,12 +41,22 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     super.dispose();
   }
 
-  void _saveTask() {
+  void _saveTask() async{
     final taskText = taskCon.text.trim();
+    if(taskText.isEmpty)return;
     final detailsText = detailsCon.text.trim();
+    final newTask = TaskIsarModel()
+      ..name = taskText
+      ..details = detailsText.isEmpty ? null : detailsText
+      ..createdAt = DateTime.now().toIso8601String();
 
-    // 🔥 Bloc বা Provider logic এখানে কল করো
-    debugPrint("Saving task: $taskText, details: $detailsText");
+    final db = DBServices.db;
+    await db.writeTxn(()async{
+      final newTaskId = await db.taskIsarModels.put(newTask);
+      widget.taskTitleListIsarModel.tasks.add(newTask);
+      await widget.taskTitleListIsarModel.tasks.save();
+    });
+
 
     Navigator.pop(context); // Optional: dismiss modal
   }

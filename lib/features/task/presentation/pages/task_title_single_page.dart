@@ -38,7 +38,7 @@ class TaskTitleSinglePage extends StatelessWidget {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            builder: (_) => const AddTaskBottomSheet(),
+            builder: (_) => AddTaskBottomSheet(taskTitleListIsarModel: taskTitleListIsarModel,),
           );
         },
         child: Icon(Icons.add),

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taskmate/core/services/db_services.dart';
 import 'package:taskmate/features/task/presentation/pages/task_title_single_page.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/constants/app_sizes.dart';
-import '../../data/datasources/task_local_data_source.dart';
 import '../../data/models/task_title_list_isar_model.dart';
 
 class TaskTitleCreatePage extends StatefulWidget {
@@ -45,7 +45,10 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
               builder: (_,value,child)=> TextButton(onPressed: value ? ()async{
                 TaskTitleListIsarModel model = TaskTitleListIsarModel()
                 ..taskTitle = titleCon.text;
-                await TaskLocalDataSource().saveTaskTitle(model);
+                final db = DBServices.db;
+                await db.writeTxn(() async {
+                  await db.taskTitleListIsarModels.put(model);
+                });
                 //route single task page for create task
                 Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: model,)));
               }:null, child: Text("Next",style: TextStyle(fontWeight: FontWeight.bold),))

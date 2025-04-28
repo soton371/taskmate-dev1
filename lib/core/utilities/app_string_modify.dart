@@ -5,6 +5,9 @@ String? capitalizeFirstLetter(String? word) {
   return word[0].toUpperCase() + word.substring(1).toLowerCase();
 }
 
+String formatToTwoDigits(String number) {
+  return number.toString().padLeft(2, '0');
+}
 
 
 

@@ -12,31 +12,31 @@ class TaskTitleListResponseModel {
   final int? id;
   final String? taskTitle;
   final List<Task>? tasks;
-  final int? todayRemainsTaskCount;
-  final int? todayTotalTaskCount;
+  final int? totalRemainsTaskCount;
+  final int? totalCompletedTaskCount;
 
   TaskTitleListResponseModel({
     this.id,
     this.taskTitle,
     this.tasks,
-    this.todayRemainsTaskCount,
-    this.todayTotalTaskCount,
+    this.totalRemainsTaskCount,
+    this.totalCompletedTaskCount,
   });
 
   factory TaskTitleListResponseModel.fromJson(Map<String, dynamic> json) => TaskTitleListResponseModel(
     id: json["id"],
     taskTitle: json["task_title"],
     tasks: json["tasks"] == null ? [] : List<Task>.from(json["tasks"]!.map((x) => Task.fromJson(x))),
-    todayRemainsTaskCount: json["today_remains_task_count"],
-    todayTotalTaskCount: json["today_total_task_count"],
+    totalRemainsTaskCount: json["today_remains_task_count"],
+    totalCompletedTaskCount: json["today_total_task_count"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "task_title": taskTitle,
     "tasks": tasks == null ? [] : List<dynamic>.from(tasks!.map((x) => x.toJson())),
-    "today_remains_task_count": todayRemainsTaskCount,
-    "today_total_task_count": todayTotalTaskCount,
+    "today_remains_task_count": totalRemainsTaskCount,
+    "today_total_task_count": totalCompletedTaskCount,
   };
 }
 

@@ -23,14 +23,14 @@ const TaskTitleListIsarModelSchema = CollectionSchema(
       name: r'taskTitle',
       type: IsarType.string,
     ),
-    r'todayRemainsTaskCount': PropertySchema(
+    r'todayCompletedTaskCount': PropertySchema(
       id: 1,
-      name: r'todayRemainsTaskCount',
+      name: r'todayCompletedTaskCount',
       type: IsarType.long,
     ),
-    r'todayTotalTaskCount': PropertySchema(
+    r'todayRemainsTaskCount': PropertySchema(
       id: 2,
-      name: r'todayTotalTaskCount',
+      name: r'todayRemainsTaskCount',
       type: IsarType.long,
     )
   },
@@ -77,8 +77,8 @@ void _taskTitleListIsarModelSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.taskTitle);
-  writer.writeLong(offsets[1], object.todayRemainsTaskCount);
-  writer.writeLong(offsets[2], object.todayTotalTaskCount);
+  writer.writeLong(offsets[1], object.totalCompletedTaskCount);
+  writer.writeLong(offsets[2], object.totalRemainsTaskCount);
 }
 
 TaskTitleListIsarModel _taskTitleListIsarModelDeserialize(
@@ -90,8 +90,8 @@ TaskTitleListIsarModel _taskTitleListIsarModelDeserialize(
   final object = TaskTitleListIsarModel();
   object.id = id;
   object.taskTitle = reader.readStringOrNull(offsets[0]);
-  object.todayRemainsTaskCount = reader.readLongOrNull(offsets[1]);
-  object.todayTotalTaskCount = reader.readLongOrNull(offsets[2]);
+  object.totalCompletedTaskCount = reader.readLongOrNull(offsets[1]);
+  object.totalRemainsTaskCount = reader.readLongOrNull(offsets[2]);
   return object;
 }
 
@@ -424,6 +424,80 @@ extension TaskTitleListIsarModelQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'todayCompletedTaskCount',
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'todayCompletedTaskCount',
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'todayCompletedTaskCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'todayCompletedTaskCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'todayCompletedTaskCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
+      QAfterFilterCondition> todayCompletedTaskCountBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'todayCompletedTaskCount',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
       QAfterFilterCondition> todayRemainsTaskCountIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -489,80 +563,6 @@ extension TaskTitleListIsarModelQueryFilter on QueryBuilder<
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'todayRemainsTaskCount',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'todayTotalTaskCount',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'todayTotalTaskCount',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'todayTotalTaskCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'todayTotalTaskCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'todayTotalTaskCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel,
-      QAfterFilterCondition> todayTotalTaskCountBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'todayTotalTaskCount',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -656,6 +656,20 @@ extension TaskTitleListIsarModelQuerySortBy
   }
 
   QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
+      sortByTodayCompletedTaskCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'todayCompletedTaskCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
+      sortByTodayCompletedTaskCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'todayCompletedTaskCount', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
       sortByTodayRemainsTaskCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'todayRemainsTaskCount', Sort.asc);
@@ -666,20 +680,6 @@ extension TaskTitleListIsarModelQuerySortBy
       sortByTodayRemainsTaskCountDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'todayRemainsTaskCount', Sort.desc);
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
-      sortByTodayTotalTaskCount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'todayTotalTaskCount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
-      sortByTodayTotalTaskCountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'todayTotalTaskCount', Sort.desc);
     });
   }
 }
@@ -715,6 +715,20 @@ extension TaskTitleListIsarModelQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
+      thenByTodayCompletedTaskCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'todayCompletedTaskCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
+      thenByTodayCompletedTaskCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'todayCompletedTaskCount', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
       thenByTodayRemainsTaskCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'todayRemainsTaskCount', Sort.asc);
@@ -725,20 +739,6 @@ extension TaskTitleListIsarModelQuerySortThenBy on QueryBuilder<
       thenByTodayRemainsTaskCountDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'todayRemainsTaskCount', Sort.desc);
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
-      thenByTodayTotalTaskCount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'todayTotalTaskCount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QAfterSortBy>
-      thenByTodayTotalTaskCountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'todayTotalTaskCount', Sort.desc);
     });
   }
 }
@@ -753,16 +753,16 @@ extension TaskTitleListIsarModelQueryWhereDistinct
   }
 
   QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QDistinct>
-      distinctByTodayRemainsTaskCount() {
+      distinctByTodayCompletedTaskCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'todayRemainsTaskCount');
+      return query.addDistinctBy(r'todayCompletedTaskCount');
     });
   }
 
   QueryBuilder<TaskTitleListIsarModel, TaskTitleListIsarModel, QDistinct>
-      distinctByTodayTotalTaskCount() {
+      distinctByTodayRemainsTaskCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'todayTotalTaskCount');
+      return query.addDistinctBy(r'todayRemainsTaskCount');
     });
   }
 }
@@ -783,16 +783,16 @@ extension TaskTitleListIsarModelQueryProperty on QueryBuilder<
   }
 
   QueryBuilder<TaskTitleListIsarModel, int?, QQueryOperations>
-      todayRemainsTaskCountProperty() {
+      todayCompletedTaskCountProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'todayRemainsTaskCount');
+      return query.addPropertyName(r'todayCompletedTaskCount');
     });
   }
 
   QueryBuilder<TaskTitleListIsarModel, int?, QQueryOperations>
-      todayTotalTaskCountProperty() {
+      todayRemainsTaskCountProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'todayTotalTaskCount');
+      return query.addPropertyName(r'todayRemainsTaskCount');
     });
   }
 }

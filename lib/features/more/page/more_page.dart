@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taskmate/app/routes/app_routes.dart';
 import 'package:taskmate/features/activity/pages/activity_page.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -8,7 +9,6 @@ import '../../../core/constants/app_images.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/widgets/app_input_widgets.dart';
 import '../../profile/pages/profile_page.dart';
-import '../../search/pages/search_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -159,23 +159,28 @@ class MorePage extends StatelessWidget {
             ),
           ),
           //for more option list
-          Container(
-            padding: EdgeInsets.all(AppSizes.paddingBody),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(width: 0.1, color: AppColors.subtitle))
-            ),
-            child: Row(
-              children: [
-                Icon(AppIcons.calculator),
-                SizedBox(width: AppSizes.paddingBody,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Cashbook",style: TextStyle(fontSize: AppSizes.fontSizeLarge),),
-                    Text("Smartly manage your accounts",style: TextStyle(color: AppColors.subtitle),),
-                  ],
-                )
-              ],
+          InkWell(
+            onTap: (){
+              Navigator.pushNamed(context, AppRoutes.currencySelectionPage);
+            },
+            child: Container(
+              padding: EdgeInsets.all(AppSizes.paddingBody),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(width: 0.1, color: AppColors.subtitle))
+              ),
+              child: Row(
+                children: [
+                  Icon(AppIcons.calculator),
+                  SizedBox(width: AppSizes.paddingBody,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Cashbook",style: TextStyle(fontSize: AppSizes.fontSizeLarge),),
+                      Text("Smartly manage your accounts",style: TextStyle(color: AppColors.subtitle),),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           InkWell(

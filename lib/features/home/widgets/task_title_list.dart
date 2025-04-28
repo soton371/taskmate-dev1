@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/services/db_services.dart';
+import '../../../core/utilities/app_string_modify.dart';
 import '../../task/data/models/task_title_list_isar_model.dart';
 import '../../task/presentation/pages/task_title_create_page.dart';
 
@@ -30,7 +31,6 @@ class _TaskTitleListState extends State<TaskTitleList> {
         .asyncMap((_) => tt.where().findAll());
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,10 +53,10 @@ class _TaskTitleListState extends State<TaskTitleList> {
                         // route title page for showing tasks by title
                         Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: taskTitle)));
                       },
-                      count: "${taskTitle.todayRemainsTaskCount??00}",
+                      count: "${taskTitle.totalRemainsTaskCount??0}",
                       title: taskTitle.taskTitle??'Unknown',
-                      completed: taskTitle.todayRemainsTaskCount != null &&
-                          taskTitle.todayRemainsTaskCount == taskTitle.todayTotalTaskCount,
+                      completed: taskTitle.totalRemainsTaskCount != null &&
+                          taskTitle.totalRemainsTaskCount == 0,
                     ),
                   );
                 } else {
@@ -111,7 +111,7 @@ class TaskTitleCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   color: AppColors.lightGrey
                 ),
-                child: completed == true ? Icon(AppIcons.task, color: AppColors.selected, size: AppSizes.fontSizeLarge,) : Text(count??'0', style: TextStyle(
+                child: completed == true ? Icon(AppIcons.task, color: AppColors.selected, size: AppSizes.fontSizeLarge,) : Text(formatToTwoDigits(count??'00'), style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: AppSizes.fontSizeSmall,
                     color: completed == true ? AppColors.selected : null

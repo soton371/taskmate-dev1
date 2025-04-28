@@ -41,56 +41,83 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
         title: Text("Create new list"),
         actions: [
           ValueListenableBuilder(
-              valueListenable: isTextNotEmptyNotifier,
-              builder: (_,value,child)=> TextButton(onPressed: value ? ()async{
-                TaskTitleListIsarModel model = TaskTitleListIsarModel()
-                ..taskTitle = titleCon.text;
-                final db = DBServices.db;
-                await db.writeTxn(() async {
-                  await db.taskTitleListIsarModels.put(model);
-                });
-                //route single task page for create task
-                Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: model,)));
-              }:null, child: Text("Next",style: TextStyle(fontWeight: FontWeight.bold),))
+            valueListenable: isTextNotEmptyNotifier,
+            builder:
+                (_, value, child) => TextButton(
+                  onPressed:
+                      value
+                          ? () async {
+                            TaskTitleListIsarModel model =
+                                TaskTitleListIsarModel()
+                                  ..taskTitle = titleCon.text;
+                            final db = DBServices.db;
+                            await db.writeTxn(() async {
+                              await db.taskTitleListIsarModels.put(model);
+                            });
+                            //route single task page for create task
+                            Navigator.pushReplacement(
+                              context,
+                              CupertinoPageRoute(
+                                builder:
+                                    (_) => TaskTitleSinglePage(
+                                      taskTitleListIsarModel: model,
+                                    ),
+                              ),
+                            );
+                          }
+                          : null,
+                  child: Text(
+                    "Next",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
           ),
         ],
       ),
       body: ListView(
-          children: [
-            SizedBox(height: AppSizes.paddingBody,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingBody),
-              child: Text("Enter list title", style: TextStyle(fontWeight: FontWeight.w500, fontSize: AppSizes.fontSizeLarge),),
+        children: [
+          SizedBox(height: AppSizes.paddingBody),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.paddingBody,
             ),
-            TextFormField(
-              controller: titleCon,
-              decoration: InputDecoration(
-                hintText: "ex. Meetings",
-                prefixIcon: Icon(AppIcons.list)
+            child: Text(
+              "Enter list title",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: AppSizes.fontSizeLarge,
               ),
             ),
-            SizedBox(height: AppSizes.paddingBody,),
-            Container(
-              margin: EdgeInsets.all(AppSizes.paddingBody),
-              padding: EdgeInsets.all(AppSizes.paddingInside),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppSizes.cardRadius),
-                  color: AppColors.randomPastelColor().withValues(alpha: 0.1)
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(AppIcons.list),
-                  SizedBox(width: AppSizes.paddingInside,),
-                  Expanded(child: Text("Assign a title to your work collection, providing a clear label where you will later organize and number the numerous individual work items.")),
-                ],
-              ),
+          ),
+          TextFormField(
+            controller: titleCon,
+            decoration: InputDecoration(
+              hintText: "ex. Meetings",
+              prefixIcon: Icon(AppIcons.list),
             ),
-            // ElevatedButton(onPressed: ()async{
-            //   final aa = await TaskLocalDataSource().getAllTaskTitles();
-            //   print("object aa: ${aa.length}");
-            // }, child: Text("data get"))
-          ]
+          ),
+          SizedBox(height: AppSizes.paddingBody),
+          Container(
+            margin: EdgeInsets.all(AppSizes.paddingBody),
+            padding: EdgeInsets.all(AppSizes.paddingInside),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+              color: AppColors.randomPastelColor().withValues(alpha: 0.1),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(AppIcons.list),
+                SizedBox(width: AppSizes.paddingInside),
+                Expanded(
+                  child: Text(
+                    "Assign a title to your work collection, providing a clear label where you will later organize and number the numerous individual work items.",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -10,8 +10,8 @@ class TaskTitleListIsarModel {
 
   final tasks = IsarLinks<TaskIsarModel>();
 
-  int? todayRemainsTaskCount;
-  int? todayTotalTaskCount;
+  int? totalRemainsTaskCount;
+  int? totalCompletedTaskCount;
 }
 
 @collection

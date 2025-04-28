@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskmate/core/constants/app_colors.dart';
 import 'package:taskmate/core/constants/app_sizes.dart';
-import 'package:taskmate/core/services/db_services.dart';
 
 import '../../../../core/utilities/app_date_time.dart';
 import '../../data/models/task_title_list_isar_model.dart';
+import '../bloc/task_bloc.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key, required this.taskTitleListIsarModel});
@@ -47,50 +48,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void _saveTask() async {
-    final taskText = taskCon.text.trim();
-    if (taskText.isEmpty) return;
-    final detailsText = detailsCon.text.trim();
-    final newTask =
-        TaskIsarModel()
-          ..name = taskText
-          ..details = detailsText.isEmpty ? null : detailsText
-          ..taskDateTime = taskDateTimeNotifier.value == null ? null : taskDateTimeNotifier.value!.toIso8601String()
-          ..createdAt = DateTime.now().toIso8601String();
-
-    int? todayTotalTaskCount;
-    int? todayRemainsTaskCount;
-    if(taskDateTimeNotifier.value != null){
-      final taskDate = taskDateTimeNotifier.value!;
-      final today = DateTime.now();
-      final taskDateOnly = DateTime(taskDate.year, taskDate.month, taskDate.day);
-      final todayOnly = DateTime(today.year, today.month, today.day);
-      todayTotalTaskCount = widget.taskTitleListIsarModel.todayTotalTaskCount;
-      todayRemainsTaskCount = widget.taskTitleListIsarModel.todayRemainsTaskCount;
-      if(todayOnly == taskDateOnly){
-        if(todayTotalTaskCount != null){
-          todayTotalTaskCount ++;
-        }else{
-          todayTotalTaskCount = 1;
-        }
-        if(todayRemainsTaskCount != null){
-          todayRemainsTaskCount ++;
-        }else{
-          todayRemainsTaskCount = 1;
-        }
-      }
-    }
-
-
-    final db = DBServices.db;
-    await db.writeTxn(() async {
-      await db.taskIsarModels.put(newTask);
-      widget.taskTitleListIsarModel.todayTotalTaskCount = todayTotalTaskCount;
-      widget.taskTitleListIsarModel.todayRemainsTaskCount = todayRemainsTaskCount;
-      widget.taskTitleListIsarModel.tasks.add(newTask);
-      await widget.taskTitleListIsarModel.tasks.save();
-    });
-
-    Navigator.pop(context); // Optional: dismiss modal
+    context.read<TaskBloc>().add(AddTaskEvent(name: taskCon.text.trim(),
+        details: detailsCon.text.trim(),
+        taskDateTime: taskDateTimeNotifier.value == null ? null : taskDateTimeNotifier.value!.toIso8601String(),
+        taskTitleListIsarModel: widget.taskTitleListIsarModel));
+    Navigator.pop(context);
   }
 
   @override

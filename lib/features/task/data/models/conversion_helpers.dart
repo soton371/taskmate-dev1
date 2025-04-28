@@ -9,8 +9,8 @@ TaskTitleListIsarModel fromResponseModel(TaskTitleListResponseModel model) {
   final isarModel = TaskTitleListIsarModel()
     ..id = model.id ?? Isar.autoIncrement
     ..taskTitle = model.taskTitle
-    ..todayRemainsTaskCount = model.todayRemainsTaskCount
-    ..todayTotalTaskCount = model.todayTotalTaskCount;
+    ..totalRemainsTaskCount = model.totalRemainsTaskCount
+    ..totalCompletedTaskCount = model.totalCompletedTaskCount;
 
   final tasks = model.tasks?.map(fromTaskModel).toList() ?? [];
 

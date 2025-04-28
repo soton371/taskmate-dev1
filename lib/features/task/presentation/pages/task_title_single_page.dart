@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskmate/core/services/db_services.dart';
 
 import '../../data/models/task_title_list_isar_model.dart';
 import '../widgets/add_task_bottom_sheet.dart';
@@ -13,7 +14,28 @@ class TaskTitleSinglePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(taskTitleListIsarModel.taskTitle??'')),
+      appBar: AppBar(title: Text(taskTitleListIsarModel.taskTitle??''),
+        actions: [
+          PopupMenuButton<int>(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: const Text("Delete"),
+              ),
+            ],
+            // on selected we show the dialog box
+            onSelected: (value) async{
+              if(value == 1){
+                final db = DBServices.db;
+                await db.writeTxn(() async {
+                  await db.taskTitleListIsarModels.delete(taskTitleListIsarModel.id); // delete
+                });
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
+      ),
       body: DefaultTabController(
         length: 2,
         child: Column(

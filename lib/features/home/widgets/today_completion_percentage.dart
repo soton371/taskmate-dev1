@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -40,6 +41,10 @@ class _TodayCompletionPercentageState extends State<TodayCompletionPercentage> {
     }
 
     final totalTasks = totalCompleted + totalRemains;
+
+    if (kDebugMode) {
+      print("object totalCompleted: $totalCompleted totalTasks: $totalTasks");
+    }
 
     if (totalTasks == 0) return 0.0; // avoid division by zero
 

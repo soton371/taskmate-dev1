@@ -33,6 +33,7 @@ class AddPeople extends StatelessWidget {
                 SizedBox(width: AppSizes.paddingBody,),
                 Expanded(
                   child: TextFormField(
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       hintText: 'Ex. Soton Ahmed',
                       border: InputBorder.none

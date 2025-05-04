@@ -4,12 +4,17 @@ import 'package:taskmate/app/routes/app_router.dart';
 import 'package:taskmate/core/constants/app_colors.dart';
 import 'package:taskmate/core/constants/app_sizes.dart';
 import 'package:taskmate/core/services/db_services.dart';
+import 'features/chat/presentation/bloc/assistant_bloc.dart';
 import 'features/splash/page/splash_page.dart';
 import 'features/task/presentation/bloc/task_bloc.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await DBServices.setup();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown
+  // ]);
   runApp(const MyApp());
 }
 
@@ -25,6 +30,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<TaskBloc>(
           create: (BuildContext context) => TaskBloc(),
+        ),
+        BlocProvider<AssistantBloc>(
+          create: (BuildContext context) => AssistantBloc(),
         ),
       ],
       child: MaterialApp(

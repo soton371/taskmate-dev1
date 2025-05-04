@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskmate/core/services/db_services.dart';
+import 'package:taskmate/features/task/presentation/pages/task_title_create_page.dart';
 
 import '../../data/models/task_title_list_isar_model.dart';
 import '../widgets/add_task_bottom_sheet.dart';
@@ -22,6 +24,10 @@ class TaskTitleSinglePage extends StatelessWidget {
                 value: 1,
                 child: const Text("Delete"),
               ),
+              PopupMenuItem(
+                value: 2,
+                child: const Text("Rename"),
+              ),
             ],
             // on selected we show the dialog box
             onSelected: (value) async{
@@ -31,6 +37,8 @@ class TaskTitleSinglePage extends StatelessWidget {
                   await db.taskTitleListIsarModels.delete(taskTitleListIsarModel.id); // delete
                 });
                 Navigator.pop(context);
+              }else if(value == 2){
+                Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=> TaskTitleCreatePage(taskTitleListIsarModel: taskTitleListIsarModel,)));
               }
             },
           ),

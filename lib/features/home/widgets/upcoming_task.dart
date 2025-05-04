@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:taskmate/core/constants/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:taskmate/core/utilities/app_date_time.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/services/db_services.dart';
 import '../../task/data/models/task_title_list_isar_model.dart';
+import '../../task/presentation/pages/task_single_page.dart';
 
 class UpcomingTask extends StatefulWidget {
   const UpcomingTask({super.key});
@@ -76,16 +78,19 @@ class _UpcomingTaskState extends State<UpcomingTask> {
               itemCount: todayRemainingTasks.length,
               itemBuilder: (context, index) {
                 final task = todayRemainingTasks[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: AppSizes.paddingBody, vertical: AppSizes.paddingInside),
-                  padding: EdgeInsets.all(AppSizes.paddingInside),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.border, width: 0.5),
-                      borderRadius: BorderRadius.circular(AppSizes.cardRadius)
-                  ),
-                  child: InkWell(
-                    onTap: (){},
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, CupertinoPageRoute(builder: (_)=> TaskSinglePage(task: task,)));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: AppSizes.paddingBody, vertical: AppSizes.paddingInside),
+                    padding: EdgeInsets.all(AppSizes.paddingInside),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.border, width: 0.5),
+                        borderRadius: BorderRadius.circular(AppSizes.cardRadius)
+                    ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           padding: EdgeInsets.all(8),

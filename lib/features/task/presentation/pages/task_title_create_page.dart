@@ -9,7 +9,9 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../data/models/task_title_list_isar_model.dart';
 
 class TaskTitleCreatePage extends StatefulWidget {
-  const TaskTitleCreatePage({super.key});
+  const TaskTitleCreatePage({super.key, this.taskTitleListIsarModel});
+
+  final TaskTitleListIsarModel? taskTitleListIsarModel;
 
   @override
   State<TaskTitleCreatePage> createState() => _TaskTitleCreatePageState();
@@ -25,6 +27,10 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
     titleCon.addListener(() {
       isTextNotEmptyNotifier.value = titleCon.text.trim().isNotEmpty;
     });
+    if (widget.taskTitleListIsarModel != null) {
+      titleCon.text = widget.taskTitleListIsarModel!.taskTitle ?? '';
+      setState(() {});
+    }
   }
 
   @override
@@ -47,27 +53,36 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
                   onPressed:
                       value
                           ? () async {
-                            TaskTitleListIsarModel model =
-                                TaskTitleListIsarModel()
-                                  ..taskTitle = titleCon.text;
-                            final db = DBServices.db;
-                            await db.writeTxn(() async {
-                              await db.taskTitleListIsarModels.put(model);
-                            });
-                            //route single task page for create task
-                            Navigator.pushReplacement(
-                              context,
-                              CupertinoPageRoute(
-                                builder:
-                                    (_) => TaskTitleSinglePage(
-                                      taskTitleListIsarModel: model,
-                                    ),
-                              ),
-                            );
+                            if (widget.taskTitleListIsarModel == null) {
+                              TaskTitleListIsarModel model =
+                                  TaskTitleListIsarModel()
+                                    ..taskTitle = titleCon.text;
+                              final db = DBServices.db;
+                              await db.writeTxn(() async {
+                                await db.taskTitleListIsarModels.put(model);
+                              });
+                              //route single task page for create task
+                              Navigator.pushReplacement(
+                                context,
+                                CupertinoPageRoute(
+                                  builder:
+                                      (_) => TaskTitleSinglePage(
+                                        taskTitleListIsarModel: model,
+                                      ),
+                                ),
+                              );
+                            } else if (widget.taskTitleListIsarModel != null) {
+                              widget.taskTitleListIsarModel!.taskTitle = titleCon.text;
+                              final db = DBServices.db;
+                              await db.writeTxn(() async {
+                                await db.taskTitleListIsarModels.put(widget.taskTitleListIsarModel!);
+                              });
+                              Navigator.pop(context);
+                            }
                           }
                           : null,
                   child: Text(
-                    "Next",
+                    widget.taskTitleListIsarModel == null ? "Next" : "Update",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -91,6 +106,7 @@ class _TaskTitleCreatePageState extends State<TaskTitleCreatePage> {
           ),
           TextFormField(
             controller: titleCon,
+            textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               hintText: "ex. Meetings",
               prefixIcon: Icon(AppIcons.list),

@@ -9,6 +9,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/services/db_services.dart';
+import '../../../../core/utilities/app_string_modify.dart';
 
 class AllTaskListView extends StatefulWidget {
   const AllTaskListView({super.key});
@@ -66,6 +67,7 @@ class _AllTaskListViewState extends State<AllTaskListView> {
                         child: TextFormField(
                           cursorColor: Colors.white,
                           style: TextStyle(color: Colors.white),
+                          textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             hintText: 'Search task title',
                             hintStyle: TextStyle(color: Colors.white),
@@ -100,7 +102,15 @@ class _AllTaskListViewState extends State<AllTaskListView> {
                             taskTitle.totalRemainsTaskCount == 0;
                         return InkWell(
                           onTap: () {
-                            Navigator.push(context, CupertinoPageRoute(builder: (_)=>TaskTitleSinglePage(taskTitleListIsarModel: taskTitle)));
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder:
+                                    (_) => TaskTitleSinglePage(
+                                      taskTitleListIsarModel: taskTitle,
+                                    ),
+                              ),
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -115,7 +125,10 @@ class _AllTaskListViewState extends State<AllTaskListView> {
                             child: Row(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8,vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 5,
+                                  ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: AppColors.lightGrey,
@@ -128,7 +141,9 @@ class _AllTaskListViewState extends State<AllTaskListView> {
                                             size: AppSizes.fontSizeLarge,
                                           )
                                           : Text(
-                                            "${taskTitle.totalRemainsTaskCount ?? '0'}",
+                                            formatToTwoDigits(
+                                              "${taskTitle.totalRemainsTaskCount ?? '0'}",
+                                            ),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: AppSizes.fontSizeLarge,

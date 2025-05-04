@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppSizes{
   static const double paddingBody = 16;
@@ -24,3 +24,4 @@ class AppSizes{
   static double height(context, double value)=>MediaQuery.sizeOf(context).height * (value/900);
   static double width(context, double value)=>MediaQuery.sizeOf(context).width * (value/300);
 }
+

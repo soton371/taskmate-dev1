@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/services/db_services.dart';
 import '../../../../core/utilities/app_date_time.dart';
@@ -11,47 +10,54 @@ part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final today = DateTime.now();
+
   TaskBloc() : super(TaskInitial()) {
     on<AddTaskEvent>(_addTask);
-    on<GetRemainingTask>(_getRemainingTask);
-    on<CompletedTaskAction>(_completedTaskAction);
+    on<GetRemainingTaskEvent>(_getRemainingTask);
+    on<CompletedTaskActionEvent>(_completedTaskAction);
+    on<DeleteTaskActionEvent>(_deleteTaskAction);
+    on<UpdateTaskEvent>(_updateTask);
   }
 
   //for add task
-  Future<void> _addTask(AddTaskEvent event, Emitter<TaskState> emit)async{
+  Future<void> _addTask(AddTaskEvent event, Emitter<TaskState> emit) async {
     final newTask =
-    TaskIsarModel()
-      ..name = event.name
-      ..details = (event.details??'').isEmpty ? null : event.details
-      ..taskDateTime = event.taskDateTime
-      ..createdAt = DateTime.now().toIso8601String();
+        TaskIsarModel()
+          ..name = event.name
+          ..details = (event.details ?? '').isEmpty ? null : event.details
+          ..taskDateTime = event.taskDateTime
+          ..createdAt = DateTime.now().toIso8601String();
 
-    int? todayRemainsTaskCount;
-      todayRemainsTaskCount = event.taskTitleListIsarModel.totalRemainsTaskCount;
-      if(todayRemainsTaskCount != null){
-        todayRemainsTaskCount ++;
-      }else{
-        todayRemainsTaskCount = 1;
-      }
-
+    int? totalRemainsTaskCount;
+    totalRemainsTaskCount = event.taskTitleListIsarModel.totalRemainsTaskCount;
+    if (totalRemainsTaskCount != null) {
+      totalRemainsTaskCount++;
+    } else {
+      totalRemainsTaskCount = 1;
+    }
 
     final db = DBServices.db;
     await db.writeTxn(() async {
       await db.taskIsarModels.put(newTask);
-      event.taskTitleListIsarModel.totalRemainsTaskCount = todayRemainsTaskCount;
+      event.taskTitleListIsarModel.totalRemainsTaskCount =
+          totalRemainsTaskCount;
       event.taskTitleListIsarModel.tasks.add(newTask);
       await event.taskTitleListIsarModel.tasks.save();
       await db.taskTitleListIsarModels.put(event.taskTitleListIsarModel);
     });
-    add(GetRemainingTask(event.taskTitleListIsarModel));
+    add(GetRemainingTaskEvent(event.taskTitleListIsarModel));
     if (kDebugMode) {
       print("New task created");
     }
   }
+
   //for end add task
 
   //for remaining task
-  Future<void> _getRemainingTask(GetRemainingTask event, Emitter<TaskState> emit)async{
+  Future<void> _getRemainingTask(
+    GetRemainingTaskEvent event,
+    Emitter<TaskState> emit,
+  ) async {
     await event.taskTitleListIsarModel.tasks.load();
     final taskList = event.taskTitleListIsarModel.tasks.toList();
     Map<String, List<TaskIsarModel>> grouped = {};
@@ -80,7 +86,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           } else {
             key =
                 formatDateTime(dateTime: taskDateOnly, format: 'E, d MMMM') ??
-                    'No date';
+                'No date';
           }
           if (!grouped.containsKey(key)) {
             grouped[key] = [];
@@ -94,49 +100,85 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       print("object _getRemainingTask");
     }
   }
+
   //for end remaining task
 
   //for completed task
-  Future<void> _completedTaskAction(CompletedTaskAction event, Emitter<TaskState> emit)async{
-    int? todayCompletedTaskCount;
-    int? todayRemainsTaskCount;
-    todayCompletedTaskCount =
-        event
-            .taskTitleListIsarModel
-            .totalCompletedTaskCount;
-    todayRemainsTaskCount =
-        event
-            .taskTitleListIsarModel
-            .totalRemainsTaskCount;
-    if (todayCompletedTaskCount != null) {
-      todayCompletedTaskCount++;
+  Future<void> _completedTaskAction(
+    CompletedTaskActionEvent event,
+    Emitter<TaskState> emit,
+  ) async {
+    int? totalCompletedTaskCount;
+    int? totalRemainsTaskCount;
+    totalCompletedTaskCount =
+        event.taskTitleListIsarModel.totalCompletedTaskCount;
+    totalRemainsTaskCount = event.taskTitleListIsarModel.totalRemainsTaskCount;
+    if (totalCompletedTaskCount != null) {
+      totalCompletedTaskCount++;
     } else {
-      todayCompletedTaskCount = 1;
+      totalCompletedTaskCount = 1;
     }
-    if (todayRemainsTaskCount != null) {
-      todayRemainsTaskCount--;
+    if (totalRemainsTaskCount != null && totalRemainsTaskCount > 0) {
+      totalRemainsTaskCount--;
     } else {
-      todayRemainsTaskCount = 0;
+      totalRemainsTaskCount = 0;
     }
 
     final db = DBServices.db;
     await db.writeTxn(() async {
-      event.task.completedAt =
-          DateTime.now().toIso8601String();
+      event.task.completedAt = DateTime.now().toIso8601String();
       await db.taskIsarModels.put(event.task);
-      event
-          .taskTitleListIsarModel
-          .totalCompletedTaskCount =
-          todayCompletedTaskCount;
-      event
-          .taskTitleListIsarModel
-          .totalRemainsTaskCount =
-          todayRemainsTaskCount;
-      await db.taskTitleListIsarModels.put(
-        event.taskTitleListIsarModel,
-      );
+      event.taskTitleListIsarModel.totalCompletedTaskCount =
+          totalCompletedTaskCount;
+      event.taskTitleListIsarModel.totalRemainsTaskCount =
+          totalRemainsTaskCount;
+      await db.taskTitleListIsarModels.put(event.taskTitleListIsarModel);
     });
-    add(GetRemainingTask(event.taskTitleListIsarModel));
+    add(GetRemainingTaskEvent(event.taskTitleListIsarModel));
   }
+
   //for end completed task
+
+  //for delete task
+  Future<void> _deleteTaskAction(
+    DeleteTaskActionEvent event,
+    Emitter<TaskState> emit,
+  ) async {
+    int? totalCompletedTaskCount;
+    int? totalRemainsTaskCount;
+    totalCompletedTaskCount =
+        event.taskTitleListIsarModel.totalCompletedTaskCount;
+    totalRemainsTaskCount = event.taskTitleListIsarModel.totalRemainsTaskCount;
+    if (totalCompletedTaskCount != null && totalCompletedTaskCount > 0) {
+      totalCompletedTaskCount--;
+    } else {
+      totalCompletedTaskCount = 0;
+    }
+    if (totalRemainsTaskCount != null && totalRemainsTaskCount > 0) {
+      totalRemainsTaskCount--;
+    } else {
+      totalRemainsTaskCount = 0;
+    }
+    final db = DBServices.db;
+    await db.writeTxn(() async {
+      await db.taskIsarModels.delete(event.task.id);
+      event.taskTitleListIsarModel.totalCompletedTaskCount =
+          totalCompletedTaskCount;
+      event.taskTitleListIsarModel.totalRemainsTaskCount =
+          totalRemainsTaskCount;
+      await db.taskTitleListIsarModels.put(event.taskTitleListIsarModel);
+    });
+    add(GetRemainingTaskEvent(event.taskTitleListIsarModel));
+  }
+  //for end delete task
+
+  //for update
+  Future<void> _updateTask(UpdateTaskEvent event, Emitter<TaskState> emit)async{
+    final db = DBServices.db;
+    await db.writeTxn(() async {
+      await db.taskIsarModels.put(event.task);
+    });
+    add(GetRemainingTaskEvent(event.taskTitleListIsarModel));
+  }
+  //for end update
 }

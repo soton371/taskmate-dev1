@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:taskmate/core/constants/app_images.dart';
 import 'package:taskmate/features/cashbook/data/models/account_model.dart';
 
 import '../../features/cashbook/data/models/budget_model.dart';
@@ -206,6 +207,49 @@ class AppValues {
     TransactionModel(title: 'Travel Food', category: categoryList[0], currency: bdtCurrency, amount: -800.00, dateTime: DateTime(2025, 4, 13, 20, 45), account: accountList[5]),
     TransactionModel(title: 'Chittagong Hotel', category: categoryList[8], currency: bdtCurrency, amount: -2100.00, dateTime: DateTime(2025, 4, 12, 22, 15), account: accountList[4]),
     TransactionModel(title: 'Sylhet Trip', category: categoryList[8], currency: bdtCurrency, amount: -3000.00, dateTime: DateTime(2025, 4, 10, 19, 45), account: accountList[10]),
+  ];
+
+  static List chatList = [
+    {
+      "sender_name": "John Wick",
+      "last_message": "How are you?",
+      "last_message_date_time": "2025-04-29T12:41:00.256",
+      "sender_active": true,
+      "unseen": false,
+      "sender_img": null
+    },
+    {
+      "sender_name": "Rafiul Islam",
+      "last_message": "Let's meet tomorrow.",
+      "last_message_date_time": "2025-04-29T10:15:00.256",
+      "sender_active": false,
+      "unseen": true,
+      "sender_img": AppImages.rafiul
+    },
+    {
+      "sender_name": "Tanisha Khan",
+      "last_message": "Thanks for the update.",
+      "last_message_date_time": "2025-04-28T18:30:00.25",
+      "sender_active": true,
+      "unseen": false,
+      "sender_img": null
+    },
+    {
+      "sender_name": "Mehedi Hasan",
+      "last_message": "Can you call me?",
+      "last_message_date_time": "2025-04-29T12:58:17.524",
+      "sender_active": false,
+      "unseen": true,
+      "sender_img": AppImages.mehedi
+    },
+    {
+      "sender_name": "Nusrat Jahan",
+      "last_message": "Got it. Talk later!",
+      "last_message_date_time": "2025-04-29T09:00:00.225",
+      "sender_active": true,
+      "unseen": false,
+      "sender_img": AppImages.nusrat
+    }
   ];
 }
 

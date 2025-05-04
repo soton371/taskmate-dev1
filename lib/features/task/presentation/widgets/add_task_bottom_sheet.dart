@@ -72,6 +72,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             controller: taskCon,
             autofocus: true,
             style: TextStyle(fontWeight: FontWeight.w600),
+            textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
               hintText: 'New task',
               hintStyle: TextStyle(fontWeight: FontWeight.w600),
@@ -81,6 +82,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           if (showDetailsField)
             TextFormField(
               controller: detailsCon,
+              textCapitalization: TextCapitalization.sentences,
+              maxLines: 2,
+              minLines: 1,
               decoration: const InputDecoration(
                 hintText: 'Add details',
                 border: InputBorder.none,

@@ -3,7 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:taskmate/features/more/page/more_page.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../chat/pages/assistant_page.dart';
+import '../../chat/presentation/pages/assistant_page.dart';
 import '../../direct_message/page/direct_message_page.dart';
 import '../../home/pages/home_page.dart';
 

@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:taskmate/core/constants/app_colors.dart';
 import 'package:taskmate/core/constants/app_images.dart';
 import 'package:taskmate/core/constants/app_sizes.dart';
+import 'package:taskmate/core/constants/app_values.dart';
+import 'package:taskmate/core/utilities/app_date_time.dart';
 import 'package:taskmate/features/direct_message/page/create_group_page.dart';
 import 'package:taskmate/features/direct_message/page/message_page.dart';
 
 import '../../../core/constants/app_icons.dart';
+import '../../../core/utilities/app_string_modify.dart';
 import '../../more/widgets/active_users.dart';
 import '../../profile/pages/profile_page.dart';
-import '../../search/pages/search_page.dart';
+
+
 
 class DirectMessagePage extends StatelessWidget {
   const DirectMessagePage({super.key});
@@ -137,13 +141,14 @@ class DirectMessagePage extends StatelessWidget {
               SizedBox(height: AppSizes.paddingBody,),
               //for chat list
               ListView.builder(
-                itemCount: 5,
+                itemCount: AppValues.chatList.length,
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 itemBuilder: (_, i) {
+                  final chat = AppValues.chatList[i];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: AppSizes.paddingBody),
+                    padding: const EdgeInsets.all(AppSizes.paddingBody),
                     child: InkWell(
                       onTap: (){
                         Navigator.push(context, CupertinoPageRoute(builder: (_)=>MessagePage()));
@@ -157,10 +162,18 @@ class DirectMessagePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(
                                   AppSizes.cardRadius,
                                 ),
-                                child: Image.asset(
-                                  AppImages.user,
+                                child: chat["sender_img"] == null? Container(
+                                  color: AppColors.randomPastelColor(),
+                                  alignment: Alignment.center,
                                   height: 45,
                                   width: 45,
+                                  child: Text(firstLetter(chat["sender_name"])??'S',style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.scaffoldBg, fontSize: AppSizes.fontSizeOverLarge),),
+                                ) :
+                                Image.asset(
+                                  chat["sender_img"],
+                                  height: 45,
+                                  width: 45,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                               Stack(
@@ -170,7 +183,7 @@ class DirectMessagePage extends StatelessWidget {
                                     radius: 6,
                                     backgroundColor: AppColors.scaffoldBg,
                                   ),
-                                  if(i&1==0)
+                                  if(chat["sender_active"])
                                     CircleAvatar(
                                       radius: 4,
                                       backgroundColor: AppColors.active,
@@ -187,23 +200,21 @@ class DirectMessagePage extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Soton Ahmed",
+                                    Text(chat["sender_name"],
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: TextStyle(fontWeight:(i & 1) == 0 ? null: FontWeight.bold, fontSize: AppSizes.fontSizeLarge),
+                                      style: TextStyle(fontWeight:(chat['unseen'])? null: FontWeight.bold, fontSize: AppSizes.fontSizeLarge),
                                     ),
                                     Text(
-                                      "  11:12 AM",
-                                      style: TextStyle(fontWeight:(i & 1) == 0 ? null: FontWeight.bold, fontSize: AppSizes.fontSizeSmall, color: AppColors.subtitle),
+                                      "  ${formatDateTime(dateTime: chat['last_message_date_time'], format: 'hh:mm a')}",
+                                      style: TextStyle(fontWeight:(chat['unseen']) ? null: FontWeight.bold, fontSize: AppSizes.fontSizeSmall, color: AppColors.subtitle),
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 2,),
-                                Text(
-                                  "Lorem Ipsum is simply dummy text of the printing",
+                                Text(chat['last_message'],
                                   style: TextStyle(
-                                    fontWeight: (i & 1) == 0 ? null: FontWeight.bold,
+                                    fontWeight: (chat['unseen']) ? null: FontWeight.bold,
                                     fontSize: AppSizes.fontSizeSmall,
                                     color: AppColors.subtitle
                                   ),
@@ -227,3 +238,4 @@ class DirectMessagePage extends StatelessWidget {
     );
   }
 }
+

@@ -11,14 +11,30 @@ final class AddTaskEvent extends TaskEvent{
   AddTaskEvent({required this.name, required this.taskTitleListIsarModel, this.details, this.taskDateTime});
 }
 
-final class GetRemainingTask extends TaskEvent{
+final class GetRemainingTaskEvent extends TaskEvent{
   final TaskTitleListIsarModel taskTitleListIsarModel;
-  GetRemainingTask(this.taskTitleListIsarModel);
+  GetRemainingTaskEvent(this.taskTitleListIsarModel);
 }
 
 
-final class CompletedTaskAction extends TaskEvent{
+final class CompletedTaskActionEvent extends TaskEvent{
   final TaskTitleListIsarModel taskTitleListIsarModel;
   final TaskIsarModel task;
-  CompletedTaskAction({required this.taskTitleListIsarModel, required this.task});
+  CompletedTaskActionEvent({required this.taskTitleListIsarModel, required this.task});
 }
+
+
+final class DeleteTaskActionEvent extends TaskEvent{
+  final TaskTitleListIsarModel taskTitleListIsarModel;
+  final TaskIsarModel task;
+  DeleteTaskActionEvent({required this.taskTitleListIsarModel, required this.task});
+}
+
+
+final class UpdateTaskEvent extends TaskEvent{
+  final TaskTitleListIsarModel taskTitleListIsarModel;
+  final TaskIsarModel task;
+
+  UpdateTaskEvent({required this.taskTitleListIsarModel, required this.task});
+}
+

@@ -106,33 +106,38 @@ class _CompletedTaskViewState extends State<CompletedTaskView> {
                             _fetchCompletedTasks();
                           },
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              task.name ?? '',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            if (task.details != null)
-                              Text(
-                                task.details ?? '',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  color: AppColors.subtitle,
-                                  fontSize: AppSizes.fontSizeSmall,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: AppSizes.paddingInside),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  task.name ?? '',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
-                              ),
-                            Text(
-                              "Completed at ${formatDateTime(dateTime: task.completedAt, format: 'E, dd MMM hh:mm a') ?? ''}",
-                              style: TextStyle(
-                                color: AppColors.subtitle,
-                                fontSize: AppSizes.fontSizeSmall,
-                              ),
+                                if (task.details != null)
+                                  Text(
+                                    task.details ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: AppColors.subtitle,
+                                      fontSize: AppSizes.fontSizeSmall,
+                                    ),
+                                  ),
+                                Text(
+                                  "Completed at ${formatDateTime(dateTime: task.completedAt, format: 'E, dd MMM hh:mm a') ?? ''}",
+                                  style: TextStyle(
+                                    color: AppColors.subtitle,
+                                    fontSize: AppSizes.fontSizeSmall,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),

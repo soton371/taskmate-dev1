@@ -34,7 +34,7 @@ class _TaskTitleListState extends State<TaskTitleList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppSizes.height(context, 105),
+      height: 90,
       child: StreamBuilder<List<TaskTitleListIsarModel>>(
           stream: taskTitleListStream,
           builder: (context, snapshot) {
